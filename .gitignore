@@ -1,0 +1,6 @@
+/vendor
+/web/node_modules
+/.project
+/var
+/initpoo.dev.zip
+/.buildpath
