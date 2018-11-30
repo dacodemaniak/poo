@@ -17,6 +17,8 @@ class Request extends HttpFoundation {
         
         $this->_getIterator();
         $this->_postIterator();
+        
+        $this->decodeURI();
     }
     
     /**
@@ -36,6 +38,25 @@ class Request extends HttpFoundation {
     private function _postIterator() {
         foreach($_POST as $key => $value) {
             $this->datas[$key] = $value;
+        }
+    }
+    
+    private function decodeURI() {
+        $uri = $_SERVER["REQUEST_URI"];
+        $uriArray = explode("/", $uri);
+        array_shift($uriArray);
+        if ($uriArray[0] === "index.php") {
+            array_shift($uriArray);
+        }
+        
+        $this->datas["module"] = $uriArray[0];
+        
+        if (count($uriArray) >= 2) {
+            $this->datas["mode"] = $uriArray[1];
+        }
+        
+        if (count($uriArray) === 3) {
+            $this->datas["id"] = $uriArray[2];
         }
     }
 }

@@ -137,14 +137,14 @@ class UserController extends Controller implements UrlInterface {
             $module = strtolower(substr($className, 0, $position));
         }
         
-        $url = "/?module=" . $module;
+        $url = "/" . $module;
         
         if ($mode !== null) {
-            $url .= "&mode=" . $mode;
+            $url .= "/" . $mode;
         }
         
         if ($id !== null) {
-            $url .= "&id=" . $id;
+            $url .= "/" . $id;
         }
         
         return $url;

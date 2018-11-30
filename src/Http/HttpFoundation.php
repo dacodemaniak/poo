@@ -14,6 +14,9 @@ class HttpFoundation  implements \Iterator {
      */
     protected $datas;
     
+    
+    protected $uri;
+    
     /**
      * Pointeur (indice) du tableau $datas
      * @var int
