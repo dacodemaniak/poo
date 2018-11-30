@@ -6,15 +6,17 @@
 * @version 1.0.0
 * @usage Singleton Retourne l'instance si elle existe
 *   sinon, créer une nouvelle instance et la retourne
+* @version 1.0.1
+*   Modification du traitement des réponses déportées dans les contrôleurs
 */
 namespace Core;
 
 require_once(__DIR__ . "/../../vendor/autoload.php");
 
 use Http\Request\Request;
-use Http\Response\Response;
 use Templating\Templater;
 use Factory\Controller\ControllerFactory;
+use Controller\ControllerInterface;
 
 class Core {
     
@@ -45,10 +47,10 @@ class Core {
     private $templater;
     
     /**
-     * Instance de la classe Http\Response
-     * @var Http\Response
+     * Contrôleur en cours
+     * @var ControllerInterface
      */
-    private $response;
+    private $controller;
     
     private function __construct() {
         spl_autoload_register(array(__CLASS__,"autoload"));
@@ -60,18 +62,15 @@ class Core {
         // Instancie l'objet Request
         $this->request = new Request();
         
-        // Charge le contrôleur en fonction du contexte
-        $response = new Response($this->handleRequest());
-        
-        // Envoie la réponse... vers le navigateur
-        $response->send();
+        // On récupère le contrôleur spécifique
+        $this->controller = $this->handleRequest();
         
     }
     
     /**
      * Gère la requête HTTP
      */
-    private function handleRequest() {
+    private function handleRequest(): ControllerInterface {
         if ($this->request->getData("module") === null) {
             // On doit donc instancier le contrôleur par défaut
             $factory = new ControllerFactory("index");

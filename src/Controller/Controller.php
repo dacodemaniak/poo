@@ -4,11 +4,14 @@
 * @author Artoris - Nov. 2018
 * @package Controller
 * @version 1.0.0
+* @version 1.0.1
+*   Refactorage des réponses
 */
 namespace Controller;
 
 use Controller\ControllerInterface;
 use Core\Core;
+use Templating\Templater;
 
 abstract class Controller implements ControllerInterface {
     /**
@@ -52,13 +55,17 @@ abstract class Controller implements ControllerInterface {
       return $this->request->isProcessMode(); 
     }
     
+    /**
+     * Retourne l'action à spécifier dans le formulaire
+     * @return string
+     */
     public function getAction() {
-        $action = "/?module=" . $this->request->getData("module");
+        $action = "/" . $this->request->getData("module");
         if ($this->request->getData("mode") !== null) {
-            $action .= "&mode=" . $this->request->getData("mode");
+            $action .= "/" . $this->request->getData("mode");
         }
         if ($this->request->getData("id") !== null) {
-            $action .= "&id=" . $this->request->getData("id");
+            $action .= "/" . $this->request->getData("id");
         }
         return $action;
     }
@@ -91,14 +98,21 @@ abstract class Controller implements ControllerInterface {
     }
     
     /**
+     * Retourne l'objet de gestion des templates
+     * @return Templater
+     */
+    public function getTemplater(): Templater {
+        return $this->templater;
+    }
+    
+    /**
      * Affiche la vue en utilisant le moteur de template
      *
      */
-    public function getTemplate(string $templateName = null) {
+    public function getTemplate(string $templateName = null): string {
         if ($templateName !== null) {
             $this->templateName = $templateName;
         }
-        $this->templater->assign("controller", $this);
-        $this->templater->display($this->templateName);
+        return $this->templateName;
     }
 }

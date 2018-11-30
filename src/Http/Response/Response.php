@@ -7,17 +7,17 @@
 */
 namespace Http\Response;
 
-use Controller\Controller;
+use Controller\ControllerInterface;
 
 
 class Response {
     /**
      * Instance d'un contrôleur
-     * @var \Controller\Controller
+     * @var \Controller\ControllerInterface
      */
     private $controller;
     
-    public function __construct(Controller $controller) {
+    public function __construct(ControllerInterface $controller) {
         $this->controller = $controller;
     }
     
@@ -28,11 +28,7 @@ class Response {
         header("HTTP/1.0 200 Ok");
         header("Content-Type: text/html");
         
-        /**
-        if ($this->controller->processingMode()) {
-            die("Process mode");
-            //header("Location: /?module=" . $this->controller->getModule());
-        }
-        **/
+        $this->controller->getTemplater()->assign("controller", $this->controller);
+        $this->controller->getTemplater()->display($this->controller->getTemplate());
     }
 }

@@ -10,6 +10,7 @@ namespace UserController;
 use Controller\Controller;
 use Templating\Templater;
 use Http\Request\Request;
+use Http\Response\Response;
 use UserController\Entity\UserEntity as User;
 use Controller\UrlInterface;
 
@@ -56,7 +57,9 @@ class UserController extends Controller implements UrlInterface {
         
         $this->setTemplateName();
         
-        $this->getTemplate();
+        // On peut donc définir une réponse...
+        $response = new Response($this);
+        $response->send();
     }
     
     /**
