@@ -15,6 +15,10 @@ use Http\Response\Json\JsonResponse;
 use UserController\Entity\UserEntity as User;
 use Controller\UrlInterface;
 
+/**
+* @Inject(\Templating\Templater)
+* @Inject(\Http\Request)
+*/
 class UserController extends Controller implements UrlInterface {
     
     /**
@@ -33,24 +37,26 @@ class UserController extends Controller implements UrlInterface {
      */
     private $user;
     
-    public function __construct(Templater $templater, Request $request) {
+     /**
+     * @param Templater $templater
+     * @param Request $request
+     * @param string $qqchose
+     */
+    public function __construct() {
         // Détemrine le nom du module
         $this->setModuleName();
-        
-        $this->templater = $templater;
-        
-        // Récupère les données de la requête
-        $this->request = $request;
-        
+    }
+    
+    public function handle() {
         if ($this->request->getData("mode") !== null) {
             if (
                 $this->request->getData("mode") === "add" ||
                 $this->request->getData("mode") === "upd" ||
                 $this->request->getData("mode") === "insert" ||
                 $this->request->getData("mode") === "update"
-            ) {
-                $this->process();
-            }
+                ) {
+                    $this->process();
+                }
         } else {
             // Alimenter le tableau
             $this->_hydrate();

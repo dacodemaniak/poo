@@ -55,6 +55,11 @@ abstract class Controller implements ControllerInterface {
       return $this->request->isProcessMode(); 
     }
     
+    public function __call($methodName, $params) {
+        if ($methodName === "inject") {
+            $this->{$params[0]} = $params[1];
+        }
+    }
     /**
      * Retourne l'action à spécifier dans le formulaire
      * @return string
