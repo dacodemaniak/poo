@@ -29,7 +29,7 @@
 					<td>{$user->getName()}</td>
 					<td>
 						<a href="{$controller->createUrl(null,"update",$user->id())}" class="btn btn-primary">M</a>
-						<a href="" class="btn btn-danger">S</a>
+						<a href="#" data-rel="{$user->id()}" class="btn btn-danger delete-action">S</a>
 					</td>
 				</tr>
 			{/foreach}
@@ -41,6 +41,10 @@
 					</td>
 			</tfoot>
 		</ul>
+		
+		<!-- Intégration des librairies JS -->
+		<script src="/web/node_modules/jquery/dist/jquery.min.js"></script>
+		<script src="/web/dist/app.js"></script>
 	</body>
 </html>
 		
