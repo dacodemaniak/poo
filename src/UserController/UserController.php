@@ -1,6 +1,6 @@
 <?php
 /**
-* @name UserController Contr�leur pour la gestion des utilisateurs
+* @name UserController Contrôleur pour la gestion des utilisateurs
 * @author Artoris - Nov. 2018
 * @package UserController
 * @version 1.0.0
@@ -10,7 +10,8 @@ namespace UserController;
 use Controller\Controller;
 use Templating\Templater;
 use Http\Request\Request;
-use Http\Response\Response;
+use Http\Response\Html\HtmlResponse;
+use Http\Response\Json\JsonResponse;
 use UserController\Entity\UserEntity as User;
 use Controller\UrlInterface;
 
@@ -58,8 +59,18 @@ class UserController extends Controller implements UrlInterface {
         $this->setTemplateName();
         
         // On peut donc définir une réponse...
-        $response = new Response($this);
-        $response->send();
+        if ($this->request->getHttpVerb() !== "DELETE") {
+            $response = new HtmlResponse($this);
+            $response->send();
+        } else {
+            $response = new JsonResponse($this);
+            // Prépare les données de la réponse
+            $datas = [
+                "name" => $this->user->name(),
+                "firstname" => $this->user->firstName()
+            ];
+            $response->send($datas);
+        }
     }
     
     /**
@@ -76,17 +87,27 @@ class UserController extends Controller implements UrlInterface {
         }
         
         // Persiste la donnée
-        if ($this->request->getData("submit") !== null) {
-            $this->user
-                ->name($this->request->getData("name"))
-                ->firstName($this->request->getData("firstName"))
-                ->userName($this->request->getData("userName"))
-                ->password($this->request->getData("password"));
-            // Persistence des données
-            $doctrine = \Core\ORM\EntityManager::getEntityManager();
-            $manager = $doctrine->getManager();
-            $manager->persist($this->user);
-            $manager->flush();
+        if ( $this->request->getData("submit") !== null ||
+            $this->request->getHttpVerb() === "DELETE"
+        ) {
+            if ($this->request->getHttpVerb() !== "DELETE") {
+                $this->user
+                    ->name($this->request->getData("name"))
+                    ->firstName($this->request->getData("firstName"))
+                    ->userName($this->request->getData("userName"))
+                    ->password($this->request->getData("password"));
+                // Persistence des données
+                $doctrine = \Core\ORM\EntityManager::getEntityManager();
+                $manager = $doctrine->getManager();
+                $manager->persist($this->user);
+                $manager->flush();
+            } else {
+                // Je dois supprimer la ligne
+                $doctrine = \Core\ORM\EntityManager::getEntityManager();
+                $manager = $doctrine->getManager();
+                $manager->remove($this->user);
+                $manager->flush();
+            }
             
             $this->request->removeData("mode");
         }

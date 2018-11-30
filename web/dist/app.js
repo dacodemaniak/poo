@@ -21,6 +21,8 @@ $('.delete-action').on('click', function(event) {
 		success: function(data) {
 			// Ce qui doit se passer si l'appel réussi
 			console.info(JSON.stringify(data));
+			// Affichage du toast...
+			toastr.success('L\'utilisateur : ' + data.name + ' ' + data.firstname + ' a bien été supprimé', 'Confirmation de suppression');
 			// On peut supprimer la ligne du tableau correspondante
 			row.remove();
 		},

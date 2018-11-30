@@ -4,6 +4,8 @@
 * @author Artoris - Nov. 2018
 * @package \Http
 * @version 1.0.0
+* @version 1.0.1
+*   Ajout de l'attribut httpVerb
 */
 namespace Http; // Espace dans lequel est défini notre classe
 
@@ -23,12 +25,24 @@ class HttpFoundation  implements \Iterator {
      */
     private $index;
 
+    /**
+     * Verbe HTTP utilisé dans la requête
+     * @var string
+     */
+    protected $httpVerb;
     
     public function __construct() {
         $this->datas = [];
         $this->index = 0;
     }
     
+    /**
+     * Retourne le verbe HTTP utilisé pour l'appel
+     * @return string
+     */
+    public function getHttpVerb(): string {
+        return $this->httpVerb !== null ? $this->httpVerb : "GET";
+    }
     
     /**
      * Retourne une valeur du tableau $datas à partir d'une clé

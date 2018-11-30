@@ -7,7 +7,7 @@
 		<title>Gestion des utilisateurs</title>
 		
 		<link href="/web/node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-		
+		<link href="/web/node_modules/toastr/build/toastr.min.css" rel="stylesheet">
 	</head>
 	
 	<body>
@@ -44,6 +44,7 @@
 		
 		<!-- Intégration des librairies JS -->
 		<script src="/web/node_modules/jquery/dist/jquery.min.js"></script>
+		<script src="/web/node_modules/toastr/build/toastr.min.js"></script>
 		<script src="/web/dist/app.js"></script>
 	</body>
 </html>

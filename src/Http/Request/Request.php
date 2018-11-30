@@ -5,11 +5,15 @@ namespace Http\Request;
  * @name Request Service de récupération des données HTTP
  * @author Artoris - Nov. 2018
  * @package Http\Request
- * @version 1.0.0   
+ * @version 1.0.0
+ * @version 1.0.1
+ *  Récupère le verbe HTTP utilisé   
  */
 use Http\HttpFoundation;
 
 class Request extends HttpFoundation {
+    
+    
     public function __construct() {
         // Appelle explicitement si nécessaire
         // le constructeur de la classe parente.
@@ -18,8 +22,12 @@ class Request extends HttpFoundation {
         $this->_getIterator();
         $this->_postIterator();
         
+        // Récupération du verbe HTTP
+        $this->httpVerb = $_SERVER["REQUEST_METHOD"];
+        
         $this->decodeURI();
     }
+    
     
     /**
      * Parcours le tableau $_GET
